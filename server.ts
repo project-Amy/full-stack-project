@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import express, { Request, Response } from "express";
 import cors from "cors";
+import routes from "./routes/routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +20,8 @@ app.get("/health", (req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+app.use("/api", routes)
 
 app.use((req: Request, res: Response) => {
   res.status(404).json({ error: "Route not found" });
