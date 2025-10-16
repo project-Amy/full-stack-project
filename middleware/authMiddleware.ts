@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { supabase } from "../lib/supabase";
+import { sendError } from "../utils/responses";
 
 export interface AuthRequest extends Request {
   user?: {
@@ -15,19 +16,13 @@ export const authMiddleware = async (
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      res.status(401).json({
-        error: "Unauthorized",
-        message: "Missing or invalid authorization header",
-      });
+      sendError(res, "Missing or invalid authorization header", 401);
       return;
     }
     const token = authHeader.substring(7);
     const { data, error } = await supabase.auth.getUser(token);
     if (error || !data.user) {
-      res.status(401).json({
-        error: "Unauthorized",
-        message: "Invalid or expired token",
-      });
+      sendError(res, "Invalid or expired token", 401);
       return;
     }
     req.user = {
@@ -35,9 +30,6 @@ export const authMiddleware = async (
     };
     next();
   } catch (err) {
-    res.status(500).json({
-      error: "Internal Server Error",
-      message: "Authentication failed",
-    });
+    sendError(res, "Authentication failed", 500);
   }
 };
