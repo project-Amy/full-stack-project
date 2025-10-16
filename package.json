@@ -7,9 +7,10 @@
   "type": "commonjs",
   "main": "index.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "start": "node dist/server.js",
     "dev": "nodemon --exec ts-node server.ts",
+    "postinstall": "prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
