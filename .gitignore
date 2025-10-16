@@ -33,3 +33,4 @@ logs/
 coverage/
 .nyc_output/
 .md
+/generated/prisma
