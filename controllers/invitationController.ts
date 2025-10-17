@@ -98,3 +98,37 @@ export const getUserInvitations = async (req: AuthRequest, res: Response) => {
     return sendError(res, "Internal server error", 500);
   }
 };
+
+/**
+ * GET /api/invitations/board/:boardId
+ * Get all invitations for a specific board (owner only)
+ */
+export const getBoardInvitations = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return sendError(res, "User not authenticated", 401);
+    }
+
+    const { boardId } = req.params;
+    if (!boardId) {
+      return sendError(res, "boardId is required", 400);
+    }
+
+    const invitations = await invitationService.getBoardInvitations(
+      boardId,
+      userId
+    );
+
+    return sendSuccess(
+      res,
+      invitations,
+      "Board invitations retrieved successfully"
+    );
+  } catch (error) {
+    if (error instanceof AppError) {
+      return sendError(res, error.message, error.statusCode);
+    }
+    return sendError(res, "Internal server error", 500);
+  }
+};

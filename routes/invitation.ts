@@ -11,5 +11,10 @@ router.post(
   invitationController.respondToInvitation
 );
 router.get("/user", authMiddleware, invitationController.getUserInvitations);
+router.get(
+  "/board/:boardId",
+  authMiddleware,
+  invitationController.getBoardInvitations
+);
 
 export default router;

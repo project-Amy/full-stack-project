@@ -38,6 +38,19 @@ export const createInvitation = async (
     throw new AppError("User is already a member of this board", 400);
   }
 
+  const existingInvitation = await prisma.boardInvitation.findUnique({
+    where: {
+      boardId_userId: {
+        boardId,
+        userId: invitedUserId,
+      },
+    },
+  });
+
+  if (existingInvitation && existingInvitation.status === "PENDING") {
+    throw new AppError("User already has a pending invitation for this board", 400);
+  }
+
   const invitation = await prisma.boardInvitation.upsert({
     where: {
       boardId_userId: {
