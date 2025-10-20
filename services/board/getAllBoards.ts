@@ -3,8 +3,7 @@ import { prisma } from "../../lib/prisma";
 export interface BoardSummaryResponse {
   id: string;
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
+  ownerId: string;
 }
 
 /**
@@ -25,8 +24,8 @@ export const getAllBoards = async (
     select: {
       id: true,
       name: true,
-      createdAt: true,
-      updatedAt: true,
+      ownerId: true,
+      description: true,
     },
     orderBy: {
       updatedAt: "desc",

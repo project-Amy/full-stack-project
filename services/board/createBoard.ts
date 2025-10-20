@@ -44,7 +44,6 @@ export const createBoard = async (
     });
     return board;
   } catch (error: any) {
-    console.error("Error creating board:", error);
     if (error.code === "P2002") {
       throw new BadRequestError("A board with this name already exists");
     }

@@ -2,7 +2,7 @@ import { TaskStatus, Priority } from "@prisma/client";
 
 export interface UserInfo {
   id: string;
-  name: string | null;
+  name: string;
 }
 
 export interface CreateTaskDTO {
@@ -32,12 +32,21 @@ export interface TaskResponse {
   status: TaskStatus;
   priority: Priority | null;
   dueDate: Date | null;
-  position: number;
-  boardId: string;
-  assigneeId: string | null;
-  creatorId: string;
-  createdAt: Date;
-  updatedAt: Date;
   assignee: UserInfo | null;
-  creator: UserInfo;
+}
+
+export interface BoardTaskItem {
+  id: string;
+  title: string;
+  description: string | null;
+  status: TaskStatus;
+  priority: Priority | null;
+  dueDate: Date | null;
+  assignee: UserInfo | null;
+}
+
+export interface BoardTasksResponse {
+  id: string;
+  name: string;
+  tasks: BoardTaskItem[];
 }

@@ -65,18 +65,26 @@ export const createTask = async (
         assignee: {
           select: {
             id: true,
-            name: true,
-          },
-        },
-        creator: {
-          select: {
-            id: true,
-            name: true,
+            email: true,
           },
         },
       },
     });
-    return task;
+
+    return {
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      status: task.status,
+      priority: task.priority,
+      dueDate: task.dueDate,
+      assignee: task.assignee
+        ? {
+            id: task.assignee.id,
+            name: task.assignee.email,
+          }
+        : null,
+    };
   } catch (error: any) {
     throw new BadRequestError("Failed to create task");
   }

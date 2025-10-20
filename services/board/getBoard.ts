@@ -1,36 +1,10 @@
 import { NotFoundError, ForbiddenError } from "../../utils/errors";
 import { prisma } from "../../lib/prisma";
-import { ViewType, TaskStatus, Priority } from "@prisma/client";
+import { ViewType } from "@prisma/client";
 
 export interface UserInfo {
   id: string;
-  name: string | null;
-}
-
-export interface BoardMemberResponse {
-  id: string;
-  userId: string;
-  boardId: string;
-  role: string;
-  joinedAt: Date;
-  user: UserInfo;
-}
-
-export interface TaskResponse {
-  id: string;
-  title: string;
-  description: string | null;
-  status: TaskStatus;
-  priority: Priority | null;
-  position: number;
-  dueDate: Date | null;
-  boardId: string;
-  assigneeId: string | null;
-  creatorId: string;
-  createdAt: Date;
-  updatedAt: Date;
-  assignee: UserInfo | null;
-  creator: UserInfo;
+  name: string;
 }
 
 export interface BoardDetailResponse {
@@ -38,18 +12,14 @@ export interface BoardDetailResponse {
   name: string;
   description: string | null;
   defaultView: ViewType;
-  ownerId: string;
-  createdAt: Date;
-  updatedAt: Date;
   owner: UserInfo;
-  members: BoardMemberResponse[];
-  tasks: TaskResponse[];
+  members: UserInfo[];
 }
 
 /**
  * @param boardId
  * @param userId
- * @returns Board con owner, members e tasks
+ * @returns Board con owner e members
  */
 export const getBoard = async (
   boardId: string,
@@ -61,7 +31,7 @@ export const getBoard = async (
       owner: {
         select: {
           id: true,
-          name: true,
+          email: true,
         },
       },
       members: {
@@ -69,27 +39,10 @@ export const getBoard = async (
           user: {
             select: {
               id: true,
-              name: true,
+              email: true,
             },
           },
         },
-      },
-      tasks: {
-        include: {
-          assignee: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          creator: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-        orderBy: [{ status: "asc" }, { position: "asc" }],
       },
     },
   });
@@ -102,5 +55,18 @@ export const getBoard = async (
     throw new ForbiddenError("You don't have access to this board");
   }
 
-  return board;
+  return {
+    id: board.id,
+    name: board.name,
+    description: board.description,
+    defaultView: board.defaultView,
+    owner: {
+      id: board.owner.id,
+      name: board.owner.email,
+    },
+    members: board.members.map((member) => ({
+      id: member.user.id,
+      name: member.user.email,
+    })),
+  };
 };

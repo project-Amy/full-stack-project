@@ -14,13 +14,7 @@ export const getTask = async (taskId: string): Promise<TaskResponse> => {
       assignee: {
         select: {
           id: true,
-          name: true,
-        },
-      },
-      creator: {
-        select: {
-          id: true,
-          name: true,
+          email: true,
         },
       },
     },
@@ -30,5 +24,18 @@ export const getTask = async (taskId: string): Promise<TaskResponse> => {
     throw new NotFoundError("Task not found");
   }
 
-  return task;
+  return {
+    id: task.id,
+    title: task.title,
+    description: task.description,
+    status: task.status,
+    priority: task.priority,
+    dueDate: task.dueDate,
+    assignee: task.assignee
+      ? {
+          id: task.assignee.id,
+          name: task.assignee.email,
+        }
+      : null,
+  };
 };
