@@ -115,10 +115,7 @@ export const getBoardInvitations = async (req: AuthRequest, res: Response) => {
       return sendError(res, "boardId is required", 400);
     }
 
-    const invitations = await invitationService.getBoardInvitations(
-      boardId,
-      userId
-    );
+    const invitations = await invitationService.getBoardInvitations(boardId);
 
     return sendSuccess(
       res,

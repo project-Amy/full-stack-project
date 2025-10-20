@@ -56,19 +56,26 @@ export const updateTask = async (
         assignee: {
           select: {
             id: true,
-            name: true,
-          },
-        },
-        creator: {
-          select: {
-            id: true,
-            name: true,
+            email: true,
           },
         },
       },
     });
 
-    return updatedTask;
+    return {
+      id: updatedTask.id,
+      title: updatedTask.title,
+      description: updatedTask.description,
+      status: updatedTask.status,
+      priority: updatedTask.priority,
+      dueDate: updatedTask.dueDate,
+      assignee: updatedTask.assignee
+        ? {
+            id: updatedTask.assignee.id,
+            name: updatedTask.assignee.email,
+          }
+        : null,
+    };
   } catch (error: any) {
     console.error("Error updating task:", error);
     throw new BadRequestError("Failed to update task");

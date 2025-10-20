@@ -78,3 +78,25 @@ export const updateTask = async (req: AuthRequest, res: Response) => {
     return sendError(res, "Internal server error", 500);
   }
 };
+
+/**
+ * GET /api/tasks/board/:boardId
+ */
+export const getBoardTasks = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return sendError(res, "User not authenticated", 401);
+    }
+
+    const { boardId } = req.params;
+    const boardWithTasks = await taskService.getBoardTasks(boardId, userId);
+
+    return sendSuccess(res, boardWithTasks, "Board tasks retrieved successfully");
+  } catch (error) {
+    if (error instanceof AppError) {
+      return sendError(res, error.message, error.statusCode);
+    }
+    return sendError(res, "Internal server error", 500);
+  }
+};

@@ -11,6 +11,12 @@ export interface BoardInfo {
   name: string;
 }
 
+export interface BoardWithOwnerName {
+  id: string;
+  name: string;
+  ownerName: string
+}
+
 export interface BoardWithOwner {
   id: string;
   name: string;
@@ -49,12 +55,9 @@ export interface InvitationBasicResponse {
 
 export interface UserInvitationResponse {
   id: string;
-  boardId: string;
   userId: string;
   status: InvitationStatus;
-  invitedAt: Date;
-  respondedAt: Date | null;
-  board: BoardWithOwner;
+  board: BoardWithOwnerName;
 }
 
 export interface BoardInvitationResponse {
