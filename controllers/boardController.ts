@@ -89,3 +89,52 @@ export const getBoardTasks = async (req: AuthRequest, res: Response) => {
     return sendError(res, "Internal server error", 500);
   }
 };
+
+/**
+ * DELETE /api/boards/:id
+ */
+export const deleteBoard = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return sendError(res, "User not authenticated", 401);
+    }
+    const { id } = req.params;
+
+    await boardService.deleteBoard(id, userId);
+
+    return sendSuccess(res, null, "Board deleted successfully");
+  } catch (error) {
+    if (error instanceof AppError) {
+      return sendError(res, error.message, error.statusCode);
+    }
+    return sendError(res, "Internal server error", 500);
+  }
+};
+
+/**
+ * PATCH /api/boards/:id
+ */
+export const updateBoard = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return sendError(res, "User not authenticated", 401);
+    }
+    const { id } = req.params;
+    const { name, description, defaultView } = req.body;
+
+    const updatedBoard = await boardService.updateBoard(id, userId, {
+      name,
+      description,
+      defaultView,
+    });
+
+    return sendSuccess(res, updatedBoard, "Board updated successfully");
+  } catch (error) {
+    if (error instanceof AppError) {
+      return sendError(res, error.message, error.statusCode);
+    }
+    return sendError(res, "Internal server error", 500);
+  }
+};
