@@ -12,7 +12,7 @@ export const getBoardTasks = async (
   boardId: string,
   userId: string
 ): Promise<BoardTasksResponse> => {
-  // 1. Verify board exists and user has access
+
   const board = await prisma.board.findUnique({
     where: { id: boardId },
     include: {
@@ -31,7 +31,6 @@ export const getBoardTasks = async (
     throw new ForbiddenError("You don't have access to this board");
   }
 
-  // 2. Get all tasks for the board
   const tasks = await prisma.task.findMany({
     where: { boardId },
     include: {
@@ -45,7 +44,6 @@ export const getBoardTasks = async (
     orderBy: [{ status: "asc" }, { position: "asc" }],
   });
 
-  // 3. Map to response format
   return {
     id: board.id,
     name: board.name,
