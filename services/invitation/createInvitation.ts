@@ -1,18 +1,18 @@
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utils/errors";
-import { InvitationResponse } from "./types";
+import { InvitationBasicResponse } from "./types";
 
 /**
  * @param boardId - Board ID
  * @param invitedUserId - User to invite
  * @param requestingUserId - User creating the invitation (must be board owner)
- * @returns Created invitation with user and board info
+ * @returns Created invitation basic info
  */
 export const createInvitation = async (
   boardId: string,
   invitedUserId: string,
   requestingUserId: string
-): Promise<InvitationResponse> => {
+): Promise<InvitationBasicResponse> => {
   const board = await prisma.board.findUnique({
     where: { id: boardId },
   });
@@ -67,21 +67,6 @@ export const createInvitation = async (
       boardId,
       userId: invitedUserId,
       status: "PENDING",
-    },
-    include: {
-      user: {
-        select: {
-          id: true,
-          email: true,
-          name: true,
-        },
-      },
-      board: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
     },
   });
 
