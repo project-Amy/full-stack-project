@@ -20,6 +20,7 @@ export const getAllBoards = async (req: AuthRequest, res: Response) => {
     if (error instanceof AppError) {
       return sendError(res, error.message, error.statusCode);
     }
+    console.error(`${req.method} ${req.originalUrl} error:`, error);
     return sendError(res, "Internal server error", 500);
   }
 };
@@ -66,6 +67,7 @@ export const getBoard = async (req: AuthRequest, res: Response) => {
     if (error instanceof AppError) {
       return sendError(res, error.message, error.statusCode);
     }
+    console.error(`${req.method} ${req.originalUrl} error:`, error);
     return sendError(res, "Internal server error", 500);
   }
 };
@@ -86,6 +88,7 @@ export const getBoardTasks = async (req: AuthRequest, res: Response) => {
     if (error instanceof AppError) {
       return sendError(res, error.message, error.statusCode);
     }
+    console.error(`${req.method} ${req.originalUrl} error:`, error);
     return sendError(res, "Internal server error", 500);
   }
 };
@@ -108,6 +111,7 @@ export const deleteBoard = async (req: AuthRequest, res: Response) => {
     if (error instanceof AppError) {
       return sendError(res, error.message, error.statusCode);
     }
+    console.error(`${req.method} ${req.originalUrl} error:`, error);
     return sendError(res, "Internal server error", 500);
   }
 };
@@ -135,6 +139,7 @@ export const updateBoard = async (req: AuthRequest, res: Response) => {
     if (error instanceof AppError) {
       return sendError(res, error.message, error.statusCode);
     }
+    console.error(`${req.method} ${req.originalUrl} error:`, error);
     return sendError(res, "Internal server error", 500);
   }
 };

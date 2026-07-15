@@ -30,6 +30,7 @@ export const authMiddleware = async (
     };
     next();
   } catch (err) {
+    console.error(`${req.method} ${req.originalUrl} auth error:`, err);
     sendError(res, "Authentication failed", 500);
   }
 };

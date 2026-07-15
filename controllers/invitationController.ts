@@ -30,6 +30,7 @@ export const createInvitation = async (req: AuthRequest, res: Response) => {
     if (error instanceof AppError) {
       return sendError(res, error.message, error.statusCode);
     }
+    console.error(`${req.method} ${req.originalUrl} error:`, error);
     return sendError(res, "Internal server error", 500);
   }
 };
@@ -71,6 +72,7 @@ export const respondToInvitation = async (req: AuthRequest, res: Response) => {
     if (error instanceof AppError) {
       return sendError(res, error.message, error.statusCode);
     }
+    console.error(`${req.method} ${req.originalUrl} error:`, error);
     return sendError(res, "Internal server error", 500);
   }
 };
@@ -95,6 +97,7 @@ export const getUserInvitations = async (req: AuthRequest, res: Response) => {
     if (error instanceof AppError) {
       return sendError(res, error.message, error.statusCode);
     }
+    console.error(`${req.method} ${req.originalUrl} error:`, error);
     return sendError(res, "Internal server error", 500);
   }
 };
@@ -126,6 +129,7 @@ export const getBoardInvitations = async (req: AuthRequest, res: Response) => {
     if (error instanceof AppError) {
       return sendError(res, error.message, error.statusCode);
     }
+    console.error(`${req.method} ${req.originalUrl} error:`, error);
     return sendError(res, "Internal server error", 500);
   }
 };
